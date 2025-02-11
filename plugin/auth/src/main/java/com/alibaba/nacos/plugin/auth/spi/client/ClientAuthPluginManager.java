@@ -81,6 +81,21 @@ public class ClientAuthPluginManager implements Closeable {
         return clientAuthServiceHashSet;
     }
     
+    /**
+     * get ClientAuthService by name.
+     *
+     * @param authServiceName the name of ClientAuthService.
+     * @return ClientAuthService.
+     */
+    public ClientAuthService getAuthServiceByName(String authServiceName) {
+        for (ClientAuthService each : clientAuthServiceHashSet) {
+            if (each.getAuthServiceName().equals(authServiceName)) {
+                return each;
+            }
+        }
+        return null;
+    }
+    
     @Override
     public void shutdown() throws NacosException {
         for (ClientAuthService each : clientAuthServiceHashSet) {

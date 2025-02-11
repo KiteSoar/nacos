@@ -62,4 +62,11 @@ public interface ClientAuthService extends Closeable {
      */
     LoginIdentityContext getLoginIdentityContext(RequestResource resource);
     
+    /**
+     * get auth service name.
+     *
+     * @return auth service name.
+     */
+    String getAuthServiceName();
+    
 }

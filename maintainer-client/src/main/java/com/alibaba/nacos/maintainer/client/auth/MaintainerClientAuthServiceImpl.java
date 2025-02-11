@@ -1,5 +1,5 @@
 /*
- * Copyright 1999-2021 Alibaba Group Holding Ltd.
+ * Copyright 1999-$toady.year Alibaba Group Holding Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.alibaba.nacos.client.auth.impl;
+package com.alibaba.nacos.maintainer.client.auth;
 
 import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.exception.NacosException;
-import com.alibaba.nacos.client.auth.impl.process.HttpLoginProcessor;
 import com.alibaba.nacos.common.utils.StringUtils;
+import com.alibaba.nacos.maintainer.client.constants.Constants;
 import com.alibaba.nacos.plugin.auth.api.LoginIdentityContext;
 import com.alibaba.nacos.plugin.auth.api.RequestResource;
 import com.alibaba.nacos.plugin.auth.spi.client.AbstractClientAuthService;
@@ -32,14 +32,13 @@ import java.util.concurrent.TimeUnit;
 /**
  * a ClientAuthService implement.
  *
- * @author wuyfee
+ * @author Nacos
  */
-
-public class NacosClientAuthServiceImpl extends AbstractClientAuthService {
+public class MaintainerClientAuthServiceImpl extends AbstractClientAuthService {
     
-    private static final Logger SECURITY_LOGGER = LoggerFactory.getLogger(NacosClientAuthServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MaintainerClientAuthServiceImpl.class);
     
-    public static final String NACOS_CLIENT_AUTH_SERVICE_IMPL = "NACOS_CLIENT_AUTH_SERVICE_IMPL";
+    public static final String MAINTAINER_CLIENT_AUTH_SERVICE_IMPL = "MAINTAINER_CLIENT_AUTH_SERVICE_IMPL";
     
     /**
      * TTL of token in seconds.
@@ -75,7 +74,8 @@ public class NacosClientAuthServiceImpl extends AbstractClientAuthService {
     @Override
     public Boolean login(Properties properties) {
         try {
-            boolean reLoginFlag = Boolean.parseBoolean(loginIdentityContext.getParameter(NacosAuthLoginConstant.RELOGINFLAG, "false"));
+            boolean reLoginFlag = Boolean.parseBoolean(loginIdentityContext.getParameter(
+                    Constants.AuthLoginConstant.RELOGINFLAG, "false"));
             if (reLoginFlag) {
                 if ((System.currentTimeMillis() - lastRefreshTime) < reLoginWindow) {
                     return true;
@@ -93,25 +93,25 @@ public class NacosClientAuthServiceImpl extends AbstractClientAuthService {
             }
             
             for (String server : this.serverList) {
-                HttpLoginProcessor httpLoginProcessor = new HttpLoginProcessor(nacosRestTemplate);
-                properties.setProperty(NacosAuthLoginConstant.SERVER, server);
-                LoginIdentityContext identityContext = httpLoginProcessor.getResponse(properties);
+                LoginServiceImpl httpLoginProcessor = new LoginServiceImpl(nacosRestTemplate);
+                properties.setProperty(Constants.AuthLoginConstant.SERVER, server);
+                LoginIdentityContext identityContext = httpLoginProcessor.login(properties);
                 if (identityContext != null) {
-                    if (identityContext.getAllKey().contains(NacosAuthLoginConstant.ACCESSTOKEN)) {
-                        tokenTtl = Long.parseLong(identityContext.getParameter(NacosAuthLoginConstant.TOKENTTL));
+                    if (identityContext.getAllKey().contains(Constants.AuthLoginConstant.ACCESSTOKEN)) {
+                        tokenTtl = Long.parseLong(identityContext.getParameter(Constants.AuthLoginConstant.TOKENTTL));
                         tokenRefreshWindow = tokenTtl / 10;
                         lastRefreshTime = System.currentTimeMillis();
 
                         LoginIdentityContext newCtx = new LoginIdentityContext();
-                        newCtx.setParameter(NacosAuthLoginConstant.ACCESSTOKEN,
-                                identityContext.getParameter(NacosAuthLoginConstant.ACCESSTOKEN));
+                        newCtx.setParameter(Constants.AuthLoginConstant.ACCESSTOKEN,
+                                identityContext.getParameter(Constants.AuthLoginConstant.ACCESSTOKEN));
                         this.loginIdentityContext = newCtx;
                     }
                     return true;
                 }
             }
         } catch (Throwable throwable) {
-            SECURITY_LOGGER.warn("[SecurityProxy] login failed, error: ", throwable);
+            LOGGER.warn("[MaintainerClientAuthService] login failed, error: ", throwable);
             return false;
         }
         return false;
@@ -124,7 +124,7 @@ public class NacosClientAuthServiceImpl extends AbstractClientAuthService {
     
     @Override
     public String getAuthServiceName() {
-        return NACOS_CLIENT_AUTH_SERVICE_IMPL;
+        return MAINTAINER_CLIENT_AUTH_SERVICE_IMPL;
     }
     
     @Override

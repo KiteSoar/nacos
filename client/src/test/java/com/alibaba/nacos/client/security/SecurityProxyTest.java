@@ -157,6 +157,11 @@ class SecurityProxyTest {
             }
             
             @Override
+            public String getAuthServiceName() {
+                return "";
+            }
+            
+            @Override
             public void shutdown() throws NacosException {
             
             }

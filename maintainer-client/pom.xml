@@ -78,6 +78,10 @@
             <groupId>com.alibaba.nacos</groupId>
             <artifactId>nacos-client-basic</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-auth-plugin</artifactId>
+        </dependency>
     </dependencies>
     
     <build>

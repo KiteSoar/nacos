@@ -29,6 +29,10 @@ public class Constants {
     
     public static final String DEFAULT_NACOS_ENCODE = "UTF-8";
     
+    public static final String DEFAULT_NACOS_WEB_CONTEXT = "/nacos";
+    
+    public static final String RELOGIN_FLAG = "reLoginFlag";
+    
     public static final String PERSIST_ENCODE = getPersistEncode();
     
     public static String getPersistEncode() {
@@ -73,6 +77,25 @@ public class Constants {
         public static final String CORE_CLUSTER_ADMIN_PATH = "/v3/admin/core/cluster";
         
         public static final String CORE_OPS_ADMIN_PATH = "/v3/admin/core/ops";
+    }
+    
+    public static class AuthLoginConstant {
+        
+        public static final String ACCESSTOKEN = "accessToken";
+        
+        public static final String TOKENTTL = "tokenTtl";
+        
+        public static final String TOKEN_REFRESH_WINDOW = "tokenRefreshWindow";
+        
+        public static final String USERNAME = "username";
+        
+        public static final String PASSWORD = "password";
+        
+        public static final String COLON = ":";
+        
+        public static final String SERVER = "server";
+        
+        public static final String RELOGINFLAG = "reLoginFlag";
     }
     
 }

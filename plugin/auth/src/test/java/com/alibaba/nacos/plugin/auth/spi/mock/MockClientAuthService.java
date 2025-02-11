@@ -36,6 +36,11 @@ public class MockClientAuthService extends AbstractClientAuthService {
     }
     
     @Override
+    public String getAuthServiceName() {
+        return "";
+    }
+    
+    @Override
     public void shutdown() throws NacosException {
     
     }

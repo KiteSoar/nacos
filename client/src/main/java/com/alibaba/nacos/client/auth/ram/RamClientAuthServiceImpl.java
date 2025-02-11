@@ -46,6 +46,8 @@ public class RamClientAuthServiceImpl extends AbstractClientAuthService {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(RamClientAuthServiceImpl.class);
     
+    public static final String RAM_CLIENT_AUTH_SERVICE_IMPL = "RAM_CLIENT_AUTH_SERVICE_IMPL";
+    
     private final RamContext ramContext;
     
     private final Map<String, AbstractResourceInjector> resourceInjectors;
@@ -99,6 +101,11 @@ public class RamClientAuthServiceImpl extends AbstractClientAuthService {
         }
         resourceInjectors.get(resource.getType()).doInject(resource, ramContext, result);
         return result;
+    }
+    
+    @Override
+    public String getAuthServiceName() {
+        return RAM_CLIENT_AUTH_SERVICE_IMPL;
     }
     
     private boolean notFountInjector(String type) {

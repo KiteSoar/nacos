@@ -27,6 +27,7 @@ import com.alibaba.nacos.api.naming.pojo.maintainer.ServiceDetailInfo;
 import com.alibaba.nacos.common.http.HttpRestResult;
 import com.alibaba.nacos.common.utils.HttpMethod;
 import com.alibaba.nacos.common.utils.JacksonUtils;
+import com.alibaba.nacos.maintainer.client.auth.MaintainerClientAuthServiceImpl;
 import com.alibaba.nacos.maintainer.client.constants.Constants;
 import com.alibaba.nacos.maintainer.client.model.HttpRequest;
 import com.alibaba.nacos.maintainer.client.model.core.Connection;
@@ -53,8 +54,11 @@ public class NacosNamingMaintainerServiceImpl implements NamingMaintainerService
     
     private final ClientHttpProxy clientHttpProxy;
     
+    private final MaintainerClientAuthServiceImpl maintainerClientAuthService;
+    
     public NacosNamingMaintainerServiceImpl(Properties properties) throws NacosException {
         this.clientHttpProxy = new ClientHttpProxy(properties);
+        this.maintainerClientAuthService = new MaintainerClientAuthServiceImpl();
         ParamUtil.initSerialization();
     }
     
